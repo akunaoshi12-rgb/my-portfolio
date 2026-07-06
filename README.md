@@ -1,6 +1,6 @@
-# Portfolio
+# Ade Iqbal Junianto Portfolio
 
-Website portfolio pribadi dan CV printable.
+Website portfolio pribadi dan CV printable untuk Ade Iqbal Junianto.
 
 ## Cara Menjalankan
 
