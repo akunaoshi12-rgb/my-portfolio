@@ -57,11 +57,11 @@ export default function App() {
   const renderLogo = (type: 'dwimitra' | 'arthaboga' | 'alfamidi') => {
     switch (type) {
       case 'dwimitra':
-        return <DwimitraLogo className="h-7 sm:h-8" />;
+        return <DwimitraLogo className="h-12 sm:h-14" />;
       case 'arthaboga':
-        return <ArthaBogaLogo className="h-7 sm:h-8" />;
+        return <ArthaBogaLogo className="h-12 sm:h-14" />;
       case 'alfamidi':
-        return <AlfamidiLogo className="h-7 sm:h-8" />;
+        return <AlfamidiLogo className="h-12 sm:h-14" />;
       default:
         return null;
     }
