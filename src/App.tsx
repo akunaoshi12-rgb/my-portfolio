@@ -18,7 +18,9 @@ import {
   personalDetails, 
   workExperiences, 
   hardSkills, 
-  softSkills 
+  hardSkillsIndonesian,
+  softSkills,
+  softSkillsIndonesian
 } from './data';
 import { 
   DwimitraLogo, 
@@ -27,11 +29,118 @@ import {
 } from './components/Logos';
 import { PrintedCV } from './components/PrintedCV';
 
+type Language = 'en' | 'id';
+
+const copy = {
+  en: {
+    studioAccess: 'Studio Access',
+    navAbout: 'About',
+    navExperience: 'Experience',
+    navSkills: 'Skills',
+    navContact: 'Contact',
+    portfolioIndex: '// Portfolio Index',
+    title: personalDetails.title,
+    downloadCv: 'Download CV',
+    contactMe: 'Contact Me',
+    viewExperience: 'View Experience',
+    location: 'Location',
+    viewDocument: 'View Document',
+    aboutLabel: '01 — Context',
+    aboutTitle: 'About Me',
+    experienceLabel: '02 — Milestones',
+    experienceTitle: 'Professional Experience',
+    experienceSubtitle: 'A journey of growth in retail and sales operations.',
+    skillsLabel: '03 — Spectrum',
+    skillsTitle: 'Skills & Expertise',
+    skillsSubtitle: 'Core competencies developed through practical experience.',
+    hardSkillsTitle: '// Hard Skills',
+    softSkillsTitle: '// Soft Skills',
+    contactLabel: '04 — Dialogue',
+    contactTitle: "Let's Connect",
+    contactSubtitle: 'Reach out directly for recruiting opportunities, interviews, or inquiries.',
+    fullName: 'Full Name',
+    namePlaceholder: 'Your Name',
+    emailAddress: 'Email Address',
+    message: 'Message',
+    messagePlaceholder: 'How can we help you?',
+    sendMessage: 'Send Message',
+    emailOpened: 'Email app opened. Please send the message from there.',
+    identity: '01 — Identity',
+    expertise: '02 — Expertise',
+    dialogue: '03 — Dialogue',
+    networks: '04 — Networks',
+    retailOperations: 'Retail Operations',
+    customerSupport: 'Customer Support',
+    cvNote: 'Official Printed Layout (Indonesian)',
+    printPdf: 'Print / PDF',
+    themeTitleDark: 'Switch to Light Mode',
+    themeTitleLight: 'Switch to Dark Mode',
+    languageTitle: 'Switch language',
+    mailSubjectPrefix: 'Portfolio contact from',
+    mailNameLabel: 'Name',
+    mailEmailLabel: 'Email'
+  },
+  id: {
+    studioAccess: 'Akses Studio',
+    navAbout: 'Tentang',
+    navExperience: 'Pengalaman',
+    navSkills: 'Keahlian',
+    navContact: 'Kontak',
+    portfolioIndex: '// Indeks Portofolio',
+    title: 'Spesialis Retail & Pelayanan Pelanggan',
+    downloadCv: 'Unduh CV',
+    contactMe: 'Hubungi Saya',
+    viewExperience: 'Lihat Pengalaman',
+    location: 'Lokasi',
+    viewDocument: 'Lihat Dokumen',
+    aboutLabel: '01 — Konteks',
+    aboutTitle: 'Tentang Saya',
+    experienceLabel: '02 — Perjalanan',
+    experienceTitle: 'Pengalaman Profesional',
+    experienceSubtitle: 'Perjalanan berkembang di bidang retail dan operasional penjualan.',
+    skillsLabel: '03 — Keahlian',
+    skillsTitle: 'Keahlian & Kompetensi',
+    skillsSubtitle: 'Kemampuan utama yang berkembang dari pengalaman kerja langsung.',
+    hardSkillsTitle: '// Keahlian Teknis',
+    softSkillsTitle: '// Keahlian Personal',
+    contactLabel: '04 — Komunikasi',
+    contactTitle: 'Mari Terhubung',
+    contactSubtitle: 'Hubungi langsung untuk peluang rekrutmen, wawancara, atau pertanyaan.',
+    fullName: 'Nama Lengkap',
+    namePlaceholder: 'Nama Anda',
+    emailAddress: 'Alamat Email',
+    message: 'Pesan',
+    messagePlaceholder: 'Apa yang bisa saya bantu?',
+    sendMessage: 'Kirim Pesan',
+    emailOpened: 'Aplikasi email terbuka. Silakan kirim pesan dari sana.',
+    identity: '01 — Identitas',
+    expertise: '02 — Keahlian',
+    dialogue: '03 — Komunikasi',
+    networks: '04 — Jaringan',
+    retailOperations: 'Operasional Retail',
+    customerSupport: 'Pelayanan Pelanggan',
+    cvNote: 'Layout cetak resmi (Bahasa Indonesia)',
+    printPdf: 'Cetak / PDF',
+    themeTitleDark: 'Ganti ke Mode Terang',
+    themeTitleLight: 'Ganti ke Mode Gelap',
+    languageTitle: 'Ganti bahasa',
+    mailSubjectPrefix: 'Kontak portofolio dari',
+    mailNameLabel: 'Nama',
+    mailEmailLabel: 'Email'
+  }
+};
+
 export default function App() {
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isDark, setIsDark] = useState(true);
+  const [language, setLanguage] = useState<Language>('en');
+  const t = copy[language];
+  const isIndonesian = language === 'id';
+  const summary = isIndonesian ? personalDetails.summaryIndonesian : personalDetails.summaryEnglish;
+  const displayedHardSkills = isIndonesian ? hardSkillsIndonesian : hardSkills;
+  const displayedSoftSkills = isIndonesian ? softSkillsIndonesian : softSkills;
 
   const handlePrint = () => {
     window.print();
@@ -40,9 +149,9 @@ export default function App() {
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name && formData.email && formData.message) {
-      const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`);
+      const subject = encodeURIComponent(`${t.mailSubjectPrefix} ${formData.name}`);
       const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
+        `${t.mailNameLabel}: ${formData.name}\n${t.mailEmailLabel}: ${formData.email}\n\n${formData.message}`
       );
 
       window.location.href = `mailto:${personalDetails.email}?subject=${subject}&body=${body}`;
@@ -92,18 +201,30 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <span className={`text-[9px] uppercase tracking-[0.3em] font-mono mb-0.5 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Studio Access</span>
+              <span className={`text-[9px] uppercase tracking-[0.3em] font-mono mb-0.5 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.studioAccess}</span>
               <span className="text-sm md:text-base font-black tracking-tighter uppercase">{personalDetails.name}</span>
             </motion.a>
             
             <nav className={`hidden md:flex items-center gap-10 text-[11px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-              <a href="#about" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>About</a>
-              <a href="#experience" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>Experience</a>
-              <a href="#skills" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>Skills</a>
-              <a href="#contact" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>Contact</a>
+              <a href="#about" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navAbout}</a>
+              <a href="#experience" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navExperience}</a>
+              <a href="#skills" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navSkills}</a>
+              <a href="#contact" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navContact}</a>
             </nav>
 
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => setLanguage(isIndonesian ? 'en' : 'id')}
+                className={`px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-[0.15em] border transition-all cursor-pointer ${
+                  isDark 
+                    ? 'bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800' 
+                    : 'bg-zinc-100 text-black border-zinc-200 hover:bg-zinc-200'
+                }`}
+                title={t.languageTitle}
+              >
+                {isIndonesian ? 'EN' : 'ID'}
+              </button>
+
               {/* Theme Toggle Button */}
               <button
                 onClick={() => setIsDark(!isDark)}
@@ -112,7 +233,7 @@ export default function App() {
                     ? 'bg-zinc-900 text-white border-zinc-800 hover:bg-zinc-800' 
                     : 'bg-zinc-100 text-black border-zinc-200 hover:bg-zinc-200'
                 } flex items-center justify-center`}
-                title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                title={isDark ? t.themeTitleDark : t.themeTitleLight}
               >
                 {isDark ? (
                   <Sun className="w-4 h-4 text-amber-400" />
@@ -123,7 +244,7 @@ export default function App() {
 
               <motion.button
                 onClick={() => setIsCVModalOpen(true)}
-                className={`px-4 py-2.5 text-[10px] font-mono font-bold tracking-[0.15em] uppercase rounded-none shadow-sm transition-all flex items-center gap-2 cursor-pointer ${
+                className={`px-3 sm:px-4 py-2.5 text-[10px] font-mono font-bold tracking-[0.15em] uppercase rounded-none shadow-sm transition-all flex items-center gap-2 cursor-pointer ${
                   isDark 
                     ? 'bg-white text-black hover:bg-zinc-200' 
                     : 'bg-black text-white hover:bg-zinc-800'
@@ -133,7 +254,7 @@ export default function App() {
                 transition={{ duration: 0.5 }}
               >
                 <Download className="w-3.5 h-3.5" />
-                Download CV
+                <span className="hidden sm:inline">{t.downloadCv}</span>
               </motion.button>
             </div>
           </div>
@@ -152,14 +273,14 @@ export default function App() {
                 className="relative"
               >
                 <span className={`text-[10px] uppercase tracking-[0.4em] font-mono font-medium block mb-3 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                  // Portfolio Index
+                  {t.portfolioIndex}
                 </span>
                 <h1 className="text-5xl sm:text-7xl lg:text-[100px] xl:text-[110px] font-black leading-[0.85] tracking-[-0.04em] uppercase m-0 flex flex-col">
                   <span className={isDark ? 'text-white' : 'text-black'}>{firstName}</span>
                   <span className={`md:ml-20 ${isDark ? 'text-zinc-800' : 'text-zinc-300'}`}>{lastName}</span>
                 </h1>
                 <p className={`text-sm md:text-base font-mono tracking-[0.15em] uppercase mt-4 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                  {personalDetails.title}
+                  {t.title}
                 </p>
               </motion.div>
 
@@ -169,7 +290,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
               >
-                {personalDetails.summaryEnglish}
+                {summary}
               </motion.p>
 
               {/* Action Buttons */}
@@ -185,7 +306,7 @@ export default function App() {
                     isDark ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-black hover:bg-zinc-800 text-white'
                   }`}
                 >
-                  Contact Me
+                  {t.contactMe}
                 </a>
                 <a 
                   href="#experience"
@@ -195,7 +316,7 @@ export default function App() {
                       : 'border-zinc-300 hover:border-black text-zinc-600 hover:text-black'
                   }`}
                 >
-                  View Experience
+                  {t.viewExperience}
                 </a>
               </motion.div>
 
@@ -207,7 +328,7 @@ export default function App() {
                 transition={{ duration: 0.4, delay: 0.3 }}
               >
                 <div className="flex flex-col gap-1 text-left">
-                  <span className={`text-[9px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>01 — Location</span>
+                  <span className={`text-[9px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>01 — {t.location}</span>
                   <span className={`text-xs font-bold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>{personalDetails.location}</span>
                 </div>
 
@@ -256,7 +377,7 @@ export default function App() {
                   <div className={`absolute inset-0 transition-all duration-300 flex items-center justify-center ${isDark ? 'bg-black/40 group-hover:bg-black/20' : 'bg-zinc-100/40 group-hover:bg-zinc-100/20'}`}>
                     <span className={`text-[10px] font-mono font-bold tracking-widest uppercase px-4 py-2.5 rounded-none shadow-lg scale-90 group-hover:scale-100 transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>
                       <Printer className="w-3.5 h-3.5" />
-                      View Document
+                      {t.viewDocument}
                     </span>
                   </div>
 
@@ -267,7 +388,7 @@ export default function App() {
                       <p className={`text-[8px] mt-1 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>089528559579 | adeiqbal160@gmail.com</p>
                     </div>
                     <div className={`border-t pt-2 ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                      <h4 className={`font-bold text-[9px] uppercase ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>Work Experiences</h4>
+                      <h4 className={`font-bold text-[9px] uppercase ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>{t.navExperience}</h4>
                       <div className="mt-1 space-y-1">
                         <p className={`font-bold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>DWIMITRA GROUP <span className={`font-normal ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Nov 2023 - Present</span></p>
                         <p className={`italic font-semibold ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Staff Grocery</p>
@@ -285,14 +406,14 @@ export default function App() {
         <section id="about" className={`border-y py-20 md:py-28 px-6 transition-colors duration-300 ${isDark ? 'bg-[#0D0D10] border-zinc-900/60' : 'bg-zinc-100/40 border-zinc-200'}`}>
           <div className="max-w-[1120px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
             <div className="md:col-span-4 text-left">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block mb-2 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>01 — Context</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block mb-2 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.aboutLabel}</span>
               <h2 className={`text-3xl md:text-4xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
-                About Me
+                {t.aboutTitle}
               </h2>
             </div>
             <div className="md:col-span-8 text-left">
               <p className={`leading-relaxed text-sm md:text-base text-justify font-light ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                {personalDetails.summaryEnglish}
+                {summary}
               </p>
             </div>
           </div>
@@ -301,12 +422,12 @@ export default function App() {
         {/* Experience Section */}
         <section id="experience" className="py-20 md:py-32 px-6 max-w-[1120px] mx-auto">
           <div className="text-left space-y-2 mb-20">
-            <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>02 — Milestones</span>
+            <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.experienceLabel}</span>
             <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
-              Professional Experience
+              {t.experienceTitle}
             </h2>
             <p className="text-xs md:text-sm text-zinc-500 font-mono tracking-wider uppercase">
-              A journey of growth in retail and sales operations.
+              {t.experienceSubtitle}
             </p>
           </div>
 
@@ -361,12 +482,12 @@ export default function App() {
                     <p className={`text-xs md:text-sm font-light leading-relaxed mb-6 pb-6 border-b italic text-justify ${
                       isDark ? 'text-zinc-500 border-zinc-900' : 'text-zinc-400/60 border-zinc-200'
                     }`}>
-                      {exp.descriptionEnglish}
+                      {isIndonesian ? exp.descriptionIndonesian : exp.descriptionEnglish}
                     </p>
 
                     {/* Checkpoints Bullets */}
                     <ul className="space-y-4">
-                      {exp.bulletPointsEnglish.map((bullet, i) => (
+                      {(isIndonesian ? exp.bulletPointsIndonesian : exp.bulletPointsEnglish).map((bullet, i) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`p-1 border rounded-none shrink-0 mt-0.5 ${
                             isDark ? 'bg-zinc-900 text-zinc-400 border-zinc-800' : 'bg-zinc-100 text-zinc-600 border-zinc-200'
@@ -392,12 +513,12 @@ export default function App() {
         <section id="skills" className={`border-y py-20 md:py-32 px-6 transition-colors duration-300 ${isDark ? 'bg-[#0D0D10] border-zinc-900/60' : 'bg-zinc-100/40 border-zinc-200'}`}>
           <div className="max-w-[1120px] mx-auto space-y-20">
             <div className="text-left space-y-2">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>03 — Spectrum</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.skillsLabel}</span>
               <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
-                Skills & Expertise
+                {t.skillsTitle}
               </h2>
               <p className="text-xs md:text-sm text-zinc-500 font-mono tracking-wider uppercase">
-                Core competencies developed through practical experience.
+                {t.skillsSubtitle}
               </p>
             </div>
 
@@ -417,11 +538,11 @@ export default function App() {
                   <div className={`p-2.5 border rounded-none ${isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-zinc-100 border-zinc-200 text-black'}`}>
                     <Wrench className="w-4 h-4" />
                   </div>
-                  <h3 className={`text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>// Hard Skills</h3>
+                  <h3 className={`text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>{t.hardSkillsTitle}</h3>
                 </div>
 
                 <div className="flex flex-wrap gap-2.5">
-                  {hardSkills.map((skill, index) => (
+                  {displayedHardSkills.map((skill, index) => (
                     <span 
                       key={index} 
                       className={`px-3.5 py-2 border font-mono text-xs rounded-none transition-colors cursor-default ${
@@ -450,11 +571,11 @@ export default function App() {
                   <div className={`p-2.5 border rounded-none ${isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-zinc-100 border-zinc-200 text-black'}`}>
                     <Lightbulb className="w-4 h-4" />
                   </div>
-                  <h3 className={`text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>// Soft Skills</h3>
+                  <h3 className={`text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>{t.softSkillsTitle}</h3>
                 </div>
 
                 <div className="flex flex-wrap gap-2.5">
-                  {softSkills.map((skill, index) => (
+                  {displayedSoftSkills.map((skill, index) => (
                     <span 
                       key={index} 
                       className={`px-3.5 py-2 border font-mono text-xs rounded-none transition-colors cursor-default ${
@@ -476,12 +597,12 @@ export default function App() {
         {/* Contact Form Section */}
         <section id="contact" className="py-20 md:py-32 px-6 max-w-[1120px] mx-auto">
           <div className="text-left space-y-2 mb-12">
-            <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>04 — Dialogue</span>
+            <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.contactLabel}</span>
             <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
-              Let's Connect
+              {t.contactTitle}
             </h2>
             <p className="text-xs md:text-sm text-zinc-500 font-mono tracking-wider uppercase">
-              Reach out directly for recruiting opportunities, interviews, or inquiries.
+              {t.contactSubtitle}
             </p>
           </div>
 
@@ -490,12 +611,12 @@ export default function App() {
           }`}>
             <form onSubmit={handleContactSubmit} className="space-y-6 text-left">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Full Name</label>
+                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.fullName}</label>
                 <input 
                   type="text" 
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Your Name" 
+                  placeholder={t.namePlaceholder}
                   required
                   className={`w-full px-4 py-3 border rounded-none text-sm transition-all focus:outline-none ${
                     isDark 
@@ -506,7 +627,7 @@ export default function App() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Email Address</label>
+                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.emailAddress}</label>
                 <input 
                   type="email" 
                   value={formData.email}
@@ -522,12 +643,12 @@ export default function App() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">Message</label>
+                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.message}</label>
                 <textarea 
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="How can we help you?" 
+                  placeholder={t.messagePlaceholder}
                   required
                   className={`w-full px-4 py-3 border rounded-none text-sm transition-all focus:outline-none resize-none ${
                     isDark 
@@ -544,7 +665,7 @@ export default function App() {
                 }`}
               >
                 <Send className="w-4 h-4" />
-                Send Message
+                {t.sendMessage}
               </button>
             </form>
 
@@ -559,7 +680,7 @@ export default function App() {
                   exit={{ opacity: 0, y: -10 }}
                 >
                   <Check className="w-3.5 h-3.5 shrink-0 stroke-[3px]" />
-                  Email app opened. Please send the message from there.
+                  {t.emailOpened}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -570,17 +691,17 @@ export default function App() {
         <footer className={`border-t py-16 px-6 transition-colors duration-300 ${isDark ? 'bg-zinc-950 border-zinc-900' : 'bg-zinc-50 border-zinc-200'}`}>
           <div className="max-w-[1120px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
             <div className="flex flex-col">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>01 — Identity</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.identity}</span>
               <span className={`text-sm font-extrabold ${isDark ? 'text-white' : 'text-black'}`}>{personalDetails.name}</span>
               <span className={`text-xs mt-1 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>© {new Date().getFullYear()}</span>
             </div>
             <div className="flex flex-col">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>02 — Expertise</span>
-              <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Retail Operations</span>
-              <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>Customer Support</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.expertise}</span>
+              <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{t.retailOperations}</span>
+              <span className={`text-xs font-medium ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{t.customerSupport}</span>
             </div>
             <div className="flex flex-col">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>03 — Dialogue</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.dialogue}</span>
               <div className="flex items-center gap-1.5 mb-1 text-xs">
                 <Mail className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
                 <a href={`mailto:${personalDetails.email}`} className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>
@@ -597,7 +718,7 @@ export default function App() {
               </div>
             </div>
             <div className="flex flex-col items-start md:items-end justify-between">
-              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>04 — Networks</span>
+              <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.networks}</span>
               <div className="flex gap-4">
                 <a href={personalDetails.githubUrl} target="_blank" rel="noreferrer" className={`transition-colors ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
                   <Github className="w-4 h-4" />
@@ -634,7 +755,7 @@ export default function App() {
               }`}>
                 <div>
                   <h3 className={`text-sm md:text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>// Curriculum Vitae</h3>
-                  <p className="text-[10px] text-zinc-500">Official Printed Layout (Indonesian)</p>
+                  <p className="text-[10px] text-zinc-500">{t.cvNote}</p>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -645,7 +766,7 @@ export default function App() {
                     }`}
                   >
                     <Printer className="w-3.5 h-3.5" />
-                    Print / PDF
+                    {t.printPdf}
                   </button>
                   <button
                     onClick={() => setIsCVModalOpen(false)}
