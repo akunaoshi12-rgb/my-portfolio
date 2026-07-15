@@ -41,7 +41,7 @@ export const personalDetails: PersonalDetails = {
   location: 'Cinere, Depok',
   addressIndonesian: 'Jl. Persatuan No. 27A RT002/RW004 Cinere, Kecamatan Cinere, Kota Depok, Provinsi Jawa Barat',
   summaryIndonesian: 'Saya merupakan lulusan SMK jurusan Teknik Otomotif tahun 2017. Selama karir saya, saya telah mengembangkan keterampilan komunikasi dan pelayanan melalui pengalaman sebagai Store Crew dan Sales Taking Order. Saya memiliki semangat kerja tim yang tinggi dan siap untuk berkontribusi pada lingkungan kerja yang dinamis.',
-  summaryEnglish: 'I am a passionate and detail-oriented retail specialist with a strong foundation built during my time at SMK. My approach to work is deeply rooted in a team-oriented mindset, believing that collaborative efforts yield the best results in fast-paced customer service environments. I thrive on organization, efficiency, and ensuring that every customer interaction is positive and resolving.',
+  summaryEnglish: 'I am a passionate and detail-oriented retail specialist with a strong foundation built during my time at SMK. My approach to work is deeply rooted in a team-oriented mindset, believing that collaborative efforts yield the best results in fast-paced customer service environments. I thrive on organization, efficiency, and ensuring that every customer interaction is positive and resolved.',
   linkedinUrl: 'https://linkedin.com/in/ade-iqbal-junianto',
   githubUrl: 'https://github.com/ade9994499'
 };
