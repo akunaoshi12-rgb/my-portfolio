@@ -27,6 +27,8 @@ export interface PersonalDetails {
   email: string;
   location: string;
   addressIndonesian: string;
+  heroSummaryIndonesian: string;
+  heroSummaryEnglish: string;
   summaryIndonesian: string;
   summaryEnglish: string;
   linkedinUrl: string;
@@ -40,8 +42,10 @@ export const personalDetails: PersonalDetails = {
   email: 'adeiqbal160@gmail.com',
   location: 'Cinere, Depok',
   addressIndonesian: 'Jl. Persatuan No. 27A RT002/RW004 Cinere, Kecamatan Cinere, Kota Depok, Provinsi Jawa Barat',
-  summaryIndonesian: 'Saya mengawali karir sebagai Store Crew di Alfamidi. Dari sana saya bergerak ke sales, menjadi kurir di Sicepat Express, hingga akhirnya kini mengelola operasional grocery di Growell Pondok Indah, sebuah supermarket premium. Aktivitas harian saya berkisar pada penghitungan stok, pengelolaan uang tunai, dan pelayanan pelanggan secara langsung. Portfolio ini adalah proyek pribadi yang saya bangun sendiri dengan mempelajari web development dari nol di waktu senggang, melalui YouTube dan internet. Saya terbiasa mengambil inisiatif sendiri ketika melihat peluang.',
-  summaryEnglish: 'I began my career as a Store Crew at Alfamidi. From there I moved into sales, worked as a courier at Sicepat Express, and now manage grocery operations at Growell Pondok Indah, a premium supermarket. My daily work revolves around stock counting, cash handling, and direct customer service. This portfolio is a personal project I built by learning web development from scratch in my spare time, through YouTube and the internet. I am accustomed to taking initiative on my own when I see an opportunity.',
+  heroSummaryIndonesian: 'Praktisi retail dan pelayanan pelanggan dengan pengalaman di operasional toko, penjualan, pengiriman, dan inventory grocery. Terbiasa menangani stok, kas, target harian, dan pelanggan langsung di lingkungan kerja cepat.',
+  heroSummaryEnglish: 'Retail and customer service practitioner with hands-on experience in store operations, sales, delivery, and grocery inventory. Used to handling stock, cash, daily targets, and direct customer service in fast-paced environments.',
+  summaryIndonesian: 'Saya mengawali karir sebagai Store Crew di Alfamidi. Dari sana saya bergerak ke penjualan, menjadi kurir di Sicepat Express, hingga akhirnya kini mengelola operasional grocery di Growell Pondok Indah, sebuah supermarket premium. Aktivitas harian saya berkisar pada penghitungan stok, pengelolaan uang tunai, dan pelayanan pelanggan secara langsung. Portofolio ini adalah proyek pribadi yang saya bangun sendiri dengan mempelajari pengembangan web dari nol di waktu senggang, melalui YouTube dan internet. Saya terbiasa mengambil inisiatif sendiri ketika melihat peluang.',
+  summaryEnglish: 'I began my career as a Store Crew at Alfamidi. From there I moved into sales, worked as a courier at Sicepat Express, and now manage grocery operations at Growell Pondok Indah, a premium supermarket. My daily work revolves around stock counting, cash handling, and direct customer service. This portfolio is a personal project I built by learning web development from scratch in my spare time, from YouTube and the internet. I am used to taking initiative on my own when I see an opportunity.',
   linkedinUrl: 'https://linkedin.com/in/ade-iqbal-junianto',
   githubUrl: 'https://github.com/ade9994499'
 };
@@ -163,7 +167,7 @@ export const hardSkills: string[] = [
   'Inventory Management',
   'POS Operations',
   'Cash Handling',
-  'Stock Opname',
+  'Stocktaking',
   'Merchandising'
 ];
 

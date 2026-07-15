@@ -34,9 +34,9 @@ export const PrintedCV: React.FC<PrintedCVProps> = ({ className = '' }) => {
 
       {/* WORK EXPERIENCES */}
       <div className="mt-5">
-        <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
-          Work Experiences
-        </h2>
+          <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
+            Pengalaman Kerja
+          </h2>
         
         <div className="space-y-4">
           {workExperiences.map((exp) => (
@@ -75,9 +75,9 @@ export const PrintedCV: React.FC<PrintedCVProps> = ({ className = '' }) => {
 
       {/* EDUCATION LEVEL */}
       <div className="mt-6">
-        <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
-          Education Level
-        </h2>
+          <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
+            Pendidikan
+          </h2>
         
         <div className="space-y-1">
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
@@ -104,9 +104,9 @@ export const PrintedCV: React.FC<PrintedCVProps> = ({ className = '' }) => {
 
       {/* SKILLS, ACHIEVEMENTS & OTHER EXPERIENCE */}
       <div className="mt-6 mb-2">
-        <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
-          Skills, Achievements & Other Experience
-        </h2>
+          <h2 className="text-sm md:text-base font-bold text-black border-b-2 border-black pb-0.5 mb-3 uppercase tracking-wide">
+            Keahlian & Pengalaman Lain
+          </h2>
         
         <ul className="list-disc pl-5 space-y-2 text-gray-800 text-[10.5px] md:text-[12px] text-justify">
           <li className="leading-relaxed">
