@@ -20,7 +20,8 @@ import {
   hardSkills, 
   hardSkillsIndonesian,
   softSkills,
-  softSkillsIndonesian
+  softSkillsIndonesian,
+  type WorkExperience
 } from './data';
 import { 
   DwimitraLogo, 
@@ -163,7 +164,7 @@ export default function App() {
     }
   };
 
-  const renderLogo = (type: 'dwimitra' | 'arthaboga' | 'alfamidi') => {
+  const renderLogo = (type: WorkExperience['logoType']) => {
     switch (type) {
       case 'dwimitra':
         return <DwimitraLogo className="h-12 sm:h-14" />;

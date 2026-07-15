@@ -1,5 +1,5 @@
 import React from 'react';
-import { personalDetails, workExperiences, education, hardSkillsIndonesian, softSkillsIndonesian, dailyWorkerDetailIndonesian } from '../data';
+import { personalDetails, workExperiences, education, hardSkillsIndonesian, softSkillsIndonesian } from '../data';
 
 interface PrintedCVProps {
   className?: string;
@@ -114,9 +114,6 @@ export const PrintedCV: React.FC<PrintedCVProps> = ({ className = '' }) => {
           </li>
           <li className="leading-relaxed">
             <span className="font-bold">Soft Skills:</span> {softSkillsIndonesian.join(', ')}
-          </li>
-          <li className="leading-relaxed">
-            <span className="font-bold">{dailyWorkerDetailIndonesian.title}:</span> {dailyWorkerDetailIndonesian.description}
           </li>
         </ul>
       </div>

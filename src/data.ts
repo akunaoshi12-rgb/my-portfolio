@@ -8,7 +8,7 @@ export interface WorkExperience {
   descriptionEnglish: string;
   bulletPointsIndonesian: string[];
   bulletPointsEnglish: string[];
-  logoType: 'dwimitra' | 'arthaboga' | 'alfamidi';
+  logoType: 'dwimitra' | 'arthaboga' | 'alfamidi' | 'sicepat' | 'generic';
 }
 
 export interface Education {
@@ -88,6 +88,48 @@ export const workExperiences: WorkExperience[] = [
   },
   {
     id: 'exp-3',
+    company: 'Proyek Konstruksi (Pakde)',
+    location: 'Depok & Jakarta (berpindah sesuai proyek)',
+    period: 'Jul 2020 - Feb 2021',
+    role: 'Kenek / Pekerja Konstruksi',
+    descriptionIndonesian: 'Proyek konstruksi mandiri yang dikelola keluarga, menangani berbagai pekerjaan pembangunan dan renovasi di area Depok dan Jakarta.',
+    descriptionEnglish: 'Family-managed independent construction projects handling various building and renovation works across Depok and Jakarta.',
+    bulletPointsIndonesian: [
+      'Mengangkut dan mendistribusikan material bangunan (semen, bata, pasir) ke area kerja sesuai kebutuhan.',
+      'Membantu tukang dalam persiapan dan pelaksanaan pekerjaan konstruksi sesuai arahan.',
+      'Membersihkan dan merapikan lokasi proyek untuk menjaga keamanan dan ketertiban area kerja.',
+      'Beradaptasi dengan perpindahan lokasi proyek di area Depok dan Jakarta.'
+    ],
+    bulletPointsEnglish: [
+      'Transported and distributed construction materials (cement, bricks, sand) to designated work areas.',
+      'Assisted skilled workers in preparation and execution of construction tasks under supervision.',
+      'Cleaned and organized project sites post-work to maintain safety and order.',
+      'Adapted to changing project locations across Depok and Jakarta areas.'
+    ],
+    logoType: 'generic'
+  },
+  {
+    id: 'exp-4',
+    company: 'Sicepat Express',
+    location: 'Beji, Depok',
+    period: 'Feb 2020 - Jun 2020',
+    role: 'Daily Worker Kurir',
+    descriptionIndonesian: 'Sicepat Express adalah perusahaan logistik dan pengiriman terkemuka di Indonesia yang mengkhususkan diri dalam layanan pengiriman paket cepat dan andal.',
+    descriptionEnglish: 'Sicepat Express is a leading logistics and delivery company in Indonesia, specializing in fast and reliable package delivery services.',
+    bulletPointsIndonesian: [
+      'Mengantarkan 65-100 paket per hari dengan rute area Beji, Depok.',
+      'Menjaga catatan pengiriman dan dokumentasi bukti pengiriman yang akurat.',
+      'Memberikan pelayanan ramah saat serah terima paket dan menyelesaikan kendala pengiriman.'
+    ],
+    bulletPointsEnglish: [
+      'Delivered 65-100 packages daily across assigned routes in Beji, Depok area.',
+      'Maintained accurate delivery records and proof of delivery documentation.',
+      'Provided courteous customer service during package handovers and resolved delivery issues promptly.'
+    ],
+    logoType: 'sicepat'
+  },
+  {
+    id: 'exp-5',
     company: 'PT. MIDI UTAMA INDONESIA',
     location: 'Jl. Industri Km. 12 Kp. Kadu Desa. Bunder RT 03, Cikupa Tangerang / Eks Gudang Bulog 15710',
     period: 'Mar 2018 - Dec 2019',
@@ -146,8 +188,3 @@ export const softSkillsIndonesian: string[] = [
   'Ketekunan',
   'Kerjasama Tim'
 ];
-
-export const dailyWorkerDetailIndonesian = {
-  title: 'Daily Worker Kurir',
-  description: 'Daily Worker Kurir sebagai kurir untuk periode waktu tertentu, tugasnya adalah mengantarkan barang atau paket dari satu tempat ke tempat lain sesuai dengan instruksi yang diberikan oleh perusahaan atau pelanggan. Tidak memiliki kontrak pekerjaan jangka panjang dan seringkali digaji berdasarkan jumlah pengiriman yang berhasil dilakukan dalam satu hari kerja, Kecepatan dan ketepatan waktu dalam pengiriman sangat penting dalam pekerjaan ini.'
-};
