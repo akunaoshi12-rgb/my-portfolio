@@ -26,7 +26,9 @@ import {
 import { 
   DwimitraLogo, 
   ArthaBogaLogo, 
-  AlfamidiLogo 
+  AlfamidiLogo,
+  SicepatLogo,
+  GenericLogo
 } from './components/Logos';
 import { PrintedCV } from './components/PrintedCV';
 
@@ -172,6 +174,10 @@ export default function App() {
         return <ArthaBogaLogo className="h-12 sm:h-14" />;
       case 'alfamidi':
         return <AlfamidiLogo className="h-12 sm:h-14" />;
+      case 'sicepat':
+        return <SicepatLogo className="h-12 sm:h-14" />;
+      case 'generic':
+        return <GenericLogo className="h-12 sm:h-14" />;
       default:
         return null;
     }
