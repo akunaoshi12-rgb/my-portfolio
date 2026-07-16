@@ -31,8 +31,17 @@ jobs:
           
       - name: Install dependencies
         run: npm ci
-        
-      - name: Build Project
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build project
         run: npm run build
         
       - name: Setup Pages
