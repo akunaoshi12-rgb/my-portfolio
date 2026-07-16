@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Mail, 
@@ -6,8 +6,7 @@ import {
   X, 
   Wrench, 
   Lightbulb, 
-  Check, 
-  Send, 
+  Check,
   Github, 
   Download,
   ChevronRight,
@@ -31,6 +30,7 @@ import {
   GenericLogo
 } from './components/Logos';
 import { PrintedCV } from './components/PrintedCV';
+import { ProjectsSection } from './components/ProjectsSection';
 
 type Language = 'en' | 'id';
 
@@ -40,6 +40,7 @@ const copy = {
     navAbout: 'About',
     navExperience: 'Experience',
     navSkills: 'Skills',
+    navProjects: 'Projects',
     navContact: 'Contact',
     portfolioIndex: '// Portfolio Index',
     title: personalDetails.title,
@@ -58,16 +59,10 @@ const copy = {
     skillsSubtitle: 'Core competencies developed through practical experience.',
     hardSkillsTitle: '// Hard Skills',
     softSkillsTitle: '// Soft Skills',
-    contactLabel: '04 — Dialogue',
+    contactLabel: '05 — Dialogue',
     contactTitle: "Let's Connect",
     contactSubtitle: 'Reach out directly for recruiting opportunities, interviews, or inquiries.',
-    fullName: 'Full Name',
-    namePlaceholder: 'Your Name',
-    emailAddress: 'Email Address',
-    message: 'Message',
-    messagePlaceholder: 'How can we help you?',
-    sendMessage: 'Send Message',
-    emailOpened: 'Email app opened. Please send the message from there.',
+    sendEmail: 'Send Email',
     identity: '01 — Identity',
     expertise: '02 — Expertise',
     dialogue: '03 — Dialogue',
@@ -79,18 +74,19 @@ const copy = {
     themeTitleDark: 'Switch to Light Mode',
     themeTitleLight: 'Switch to Dark Mode',
     languageTitle: 'Switch language',
-    mailSubjectPrefix: 'Portfolio contact from',
-    mailNameLabel: 'Name',
-    mailEmailLabel: 'Email',
+    mailSubject: 'Portfolio inquiry for Ade Iqbal Junianto',
     whatsappChat: 'Chat via WhatsApp',
     whatsappMessage: 'Hello, I saw your portfolio and I am interested in getting in touch.',
-    orViaEmail: '— or via email —'
+    skipToContent: 'Skip to main content',
+    closeCv: 'Close CV preview',
+    githubLabel: 'View Ade Iqbal Junianto on GitHub'
   },
   id: {
     studioAccess: 'Akses Studio',
     navAbout: 'Tentang',
     navExperience: 'Pengalaman',
     navSkills: 'Keahlian',
+    navProjects: 'Proyek',
     navContact: 'Kontak',
     portfolioIndex: '// Indeks Portofolio',
     title: 'Spesialis Retail & Pelayanan Pelanggan',
@@ -109,16 +105,10 @@ const copy = {
     skillsSubtitle: 'Kemampuan utama yang berkembang dari pengalaman kerja langsung.',
     hardSkillsTitle: '// Keahlian Teknis',
     softSkillsTitle: '// Keahlian Personal',
-    contactLabel: '04 — Komunikasi',
+    contactLabel: '05 — Komunikasi',
     contactTitle: 'Mari Terhubung',
     contactSubtitle: 'Hubungi langsung untuk peluang rekrutmen, wawancara, atau pertanyaan.',
-    fullName: 'Nama Lengkap',
-    namePlaceholder: 'Nama Anda',
-    emailAddress: 'Alamat Email',
-    message: 'Pesan',
-    messagePlaceholder: 'Apa yang bisa saya bantu?',
-    sendMessage: 'Kirim Pesan',
-    emailOpened: 'Aplikasi email terbuka. Silakan kirim pesan dari sana.',
+    sendEmail: 'Kirim Email',
     identity: '01 — Identitas',
     expertise: '02 — Keahlian',
     dialogue: '03 — Komunikasi',
@@ -130,27 +120,54 @@ const copy = {
     themeTitleDark: 'Ganti ke Mode Terang',
     themeTitleLight: 'Ganti ke Mode Gelap',
     languageTitle: 'Ganti bahasa',
-    mailSubjectPrefix: 'Kontak portofolio dari',
-    mailNameLabel: 'Nama',
-    mailEmailLabel: 'Email',
+    mailSubject: 'Peluang kerja untuk Ade Iqbal Junianto',
     whatsappChat: 'Chat via WhatsApp',
     whatsappMessage: 'Halo, saya melihat portofolio Anda dan tertarik untuk terhubung.',
-    orViaEmail: '— atau via email —'
+    skipToContent: 'Lewati ke konten utama',
+    closeCv: 'Tutup preview CV',
+    githubLabel: 'Lihat profil GitHub Ade Iqbal Junianto'
   }
 };
 
 export default function App() {
   const [isCVModalOpen, setIsCVModalOpen] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isDark, setIsDark] = useState(true);
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('id');
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const t = copy[language];
   const isIndonesian = language === 'id';
   const heroSummary = isIndonesian ? personalDetails.heroSummaryIndonesian : personalDetails.heroSummaryEnglish;
   const summary = isIndonesian ? personalDetails.summaryIndonesian : personalDetails.summaryEnglish;
   const displayedHardSkills = isIndonesian ? hardSkillsIndonesian : hardSkills;
   const displayedSoftSkills = isIndonesian ? softSkillsIndonesian : softSkills;
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
+  useEffect(() => {
+    if (!isCVModalOpen) return;
+
+    const previouslyFocusedElement = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsCVModalOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previouslyFocusedElement?.focus();
+    };
+  }, [isCVModalOpen]);
 
   const localizePeriod = (period: string): string => {
     if (!isIndonesian) return period;
@@ -163,23 +180,6 @@ export default function App() {
 
   const handlePrint = () => {
     window.print();
-  };
-
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
-      const subject = encodeURIComponent(`${t.mailSubjectPrefix} ${formData.name}`);
-      const body = encodeURIComponent(
-        `${t.mailNameLabel}: ${formData.name}\n${t.mailEmailLabel}: ${formData.email}\n\n${formData.message}`
-      );
-
-      window.location.href = `mailto:${personalDetails.email}?subject=${subject}&body=${body}`;
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    }
   };
 
   const renderLogo = (type: WorkExperience['logoType']) => {
@@ -205,6 +205,12 @@ export default function App() {
 
   return (
     <div className={`min-h-screen font-sans relative transition-colors duration-300 ${isDark ? 'bg-[#0A0A0A] text-[#F5F5F5]' : 'bg-[#FAFAFA] text-zinc-900'}`}>
+      <a
+        href="#main-content"
+        className={`fixed left-4 top-4 z-50 -translate-y-24 px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-transform focus:translate-y-0 focus:outline-none ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}
+      >
+        {t.skipToContent}
+      </a>
       
       {/* 1. PRINT-ONLY LAYER: Hidden on screen, printed perfectly on A4 */}
       <div className="hidden print:block print-only">
@@ -218,7 +224,7 @@ export default function App() {
         <header className={`sticky top-0 z-40 w-full backdrop-blur-md px-6 py-5 transition-all duration-300 border-b ${isDark ? 'bg-[#0A0A0A]/90 border-zinc-900/80 text-white' : 'bg-white/95 border-zinc-200 text-zinc-900'}`}>
           <div className="max-w-[1120px] mx-auto flex items-center justify-between">
             <motion.a 
-              href="#"
+              href="#main-content"
               className={`text-lg font-black tracking-tighter hover:text-zinc-400 uppercase flex flex-col items-start leading-none ${isDark ? 'text-white' : 'text-zinc-900'}`}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -228,15 +234,17 @@ export default function App() {
               <span className="text-sm md:text-base font-black tracking-tighter uppercase">{personalDetails.name}</span>
             </motion.a>
             
-            <nav className={`hidden md:flex items-center gap-10 text-[11px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            <nav aria-label={isIndonesian ? 'Navigasi utama' : 'Main navigation'} className={`hidden lg:flex items-center gap-6 xl:gap-8 text-[10px] xl:text-[11px] font-mono uppercase tracking-[0.16em] xl:tracking-[0.2em] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
               <a href="#about" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navAbout}</a>
               <a href="#experience" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navExperience}</a>
               <a href="#skills" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navSkills}</a>
+              <a href="#projects" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navProjects}</a>
               <a href="#contact" className={`transition-colors ${isDark ? 'hover:text-white' : 'hover:text-black text-zinc-600'}`}>{t.navContact}</a>
             </nav>
 
             <div className="flex items-center gap-3">
               <button
+                type="button"
                 onClick={() => setLanguage(isIndonesian ? 'en' : 'id')}
                 className={`px-3 py-2 text-[10px] font-mono font-bold uppercase tracking-[0.15em] border transition-all cursor-pointer ${
                   isDark 
@@ -244,12 +252,14 @@ export default function App() {
                     : 'bg-zinc-100 text-black border-zinc-200 hover:bg-zinc-200'
                 }`}
                 title={t.languageTitle}
+                aria-label={t.languageTitle}
               >
                 {isIndonesian ? 'EN' : 'ID'}
               </button>
 
               {/* Theme Toggle Button */}
               <motion.button
+                type="button"
                 onClick={() => setIsDark(!isDark)}
                 className={`p-2 transition-all cursor-pointer border ${
                   isDark 
@@ -257,17 +267,19 @@ export default function App() {
                     : 'bg-zinc-100 text-black border-zinc-200 hover:bg-zinc-200'
                 } flex items-center justify-center`}
                 title={isDark ? t.themeTitleDark : t.themeTitleLight}
+                aria-label={isDark ? t.themeTitleDark : t.themeTitleLight}
                 whileHover={{ scale: 1.15, rotate: 15 }}
                 whileTap={{ scale: 0.85 }}
               >
                 {isDark ? (
-                  <Sun className="w-4 h-4 text-amber-400" />
+                  <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
                 ) : (
-                  <Moon className="w-4 h-4 text-zinc-700" />
+                  <Moon className="w-4 h-4 text-zinc-700" aria-hidden="true" />
                 )}
               </motion.button>
 
               <motion.button
+                type="button"
                 onClick={() => setIsCVModalOpen(true)}
                 className={`px-3 sm:px-4 py-2.5 text-[10px] font-mono font-bold tracking-[0.15em] uppercase rounded-none btn-uv-brutalist transition-all flex items-center gap-2 cursor-pointer ${
                   isDark 
@@ -279,14 +291,16 @@ export default function App() {
                 transition={{ duration: 0.5 }}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
+                aria-label={t.downloadCv}
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-3.5 h-3.5" aria-hidden="true" />
                 <span className="hidden sm:inline">{t.downloadCv}</span>
               </motion.button>
             </div>
           </div>
         </header>
 
+        <main id="main-content" tabIndex={-1}>
         {/* Hero Section */}
         <section className="px-6 py-16 md:py-28 max-w-[1120px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -362,7 +376,7 @@ export default function App() {
                 <div className="flex flex-col gap-1 text-left">
                   <span className={`text-[9px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>02 — Email</span>
                   <div className="flex items-center gap-1.5">
-                    <Mail className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+                    <Mail className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} aria-hidden="true" />
                     <a href={`mailto:${personalDetails.email}`} className={`text-xs font-bold transition-colors ${isDark ? 'text-zinc-300 hover:text-white' : 'text-zinc-700 hover:text-black'}`}>
                       {personalDetails.email}
                     </a>
@@ -372,7 +386,7 @@ export default function App() {
                 <div className="flex flex-col gap-1 text-left">
                   <span className={`text-[9px] font-mono uppercase tracking-[0.2em] ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>03 — WhatsApp</span>
                   <div className="flex items-center gap-1.5">
-                    <svg viewBox="0 0 24 24" fill="currentColor" className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} aria-hidden="true">
                       <path d="M12.003 2c-5.52 0-9.99 4.49-9.99 10.02 0 1.8.48 3.54 1.39 5.07L2 22l5.08-1.33c1.47.8 3.12 1.22 4.81 1.22 5.52 0 10.01-4.49 10.01-10.02C21.9 6.49 17.52 2 12.003 2zm6.01 13.91c-.24.68-1.2 1.24-1.65 1.32-.41.08-.94.12-1.5.12-.56 0-1.28-.04-2.12-.37-1.42-.56-2.52-1.78-3.23-2.6-.08-.1-.66-.88-.66-1.68 0-.8.41-1.19.56-1.35.15-.16.32-.2.43-.2.11 0 .21.01.3.01.09 0 .21-.03.32.22.12.27.4.98.44 1.06.04.08.06.18.01.29-.05.11-.1.21-.2.32-.1.11-.2.22-.29.32-.09.09-.19.19-.08.38.11.19.49.81 1.05 1.31.72.64 1.33.84 1.52.93.19.09.3.08.41-.05.11-.13.48-.56.61-.75.13-.19.26-.16.44-.09.18.07 1.14.54 1.34.64.2.1.33.15.38.23.05.09.05.51-.19 1.19z"/>
                     </svg>
                     <a href={`https://wa.me/6289528559579`} target="_blank" rel="noreferrer" className={`text-xs font-bold transition-colors ${isDark ? 'text-zinc-300 hover:text-white' : 'text-zinc-700 hover:text-black'}`}>
@@ -390,9 +404,11 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <div 
+              <button
+                type="button"
                 onClick={() => setIsCVModalOpen(true)}
-                className="group relative cursor-pointer max-w-[340px] sm:max-w-[400px] transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2"
+                className="group relative cursor-pointer max-w-[340px] sm:max-w-[400px] transition-all duration-500 hover:scale-[1.03] hover:-translate-y-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-current text-left"
+                aria-label={t.viewDocument}
               >
                 {/* Simulated Stack Effect (Dark Brutalist styled) */}
                 <div className={`absolute inset-0 translate-x-3 translate-y-3 rotate-2 opacity-40 transition-transform group-hover:translate-x-4 group-hover:translate-y-4 group-hover:rotate-3 border ${isDark ? 'bg-zinc-950 border-zinc-900' : 'bg-zinc-200 border-zinc-300'}`}></div>
@@ -403,7 +419,7 @@ export default function App() {
                   {/* Subtle blur cover on hover */}
                   <div className={`absolute inset-0 transition-all duration-300 flex items-center justify-center ${isDark ? 'bg-black/40 group-hover:bg-black/20' : 'bg-zinc-100/40 group-hover:bg-zinc-100/20'}`}>
                     <span className={`text-[10px] font-mono font-bold tracking-widest uppercase px-4 py-2.5 rounded-none shadow-lg scale-90 group-hover:scale-100 transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                      <Printer className="w-3.5 h-3.5" />
+                      <Printer className="w-3.5 h-3.5" aria-hidden="true" />
                       {t.viewDocument}
                     </span>
                   </div>
@@ -423,7 +439,7 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </button>
             </motion.div>
 
           </div>
@@ -636,115 +652,45 @@ export default function App() {
           </div>
         </section>
 
-        {/* Contact Form Section */}
-        <section id="contact" className="py-20 md:py-32 px-6 max-w-[1120px] mx-auto">
+        <ProjectsSection isDark={isDark} isIndonesian={isIndonesian} />
+
+        {/* Contact Section */}
+        <section id="contact" aria-labelledby="contact-heading" className={`border-t py-20 md:py-32 px-6 ${isDark ? 'bg-[#0D0D10] border-zinc-900/60' : 'bg-zinc-100/40 border-zinc-200'}`}>
+          <div className="max-w-[1120px] mx-auto">
           <div className="text-left space-y-2 mb-12">
             <span className={`text-[10px] font-mono uppercase tracking-[0.3em] block ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>{t.contactLabel}</span>
-            <h2 className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
+            <h2 id="contact-heading" className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight uppercase m-0 ${isDark ? 'text-white' : 'text-black'}`}>
               {t.contactTitle}
             </h2>
-            <p className="text-xs md:text-sm text-zinc-500 font-mono tracking-wider uppercase">
+            <p className="max-w-2xl text-xs md:text-sm text-zinc-500 font-mono tracking-wider uppercase text-pretty">
               {t.contactSubtitle}
             </p>
           </div>
 
-          <div className="max-w-xl mx-auto mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
             <a
               href={`https://wa.me/6289528559579?text=${encodeURIComponent(t.whatsappMessage)}`}
               target="_blank"
               rel="noreferrer"
-              className="w-full py-3.5 text-xs font-mono font-bold tracking-widest uppercase rounded-none transition-all flex items-center justify-center gap-2.5 cursor-pointer bg-green-600 hover:bg-green-500 text-white"
+              className={`btn-uv-brutalist min-h-16 px-6 py-4 text-xs font-mono font-bold tracking-widest uppercase transition-all flex items-center justify-between gap-4 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${isDark ? 'bg-white text-black focus-visible:outline-white' : 'bg-black text-white focus-visible:outline-black'}`}
             >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0">
+              <span>{t.whatsappChat}</span>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0" aria-hidden="true">
                 <path d="M12.003 2c-5.52 0-9.99 4.49-9.99 10.02 0 1.8.48 3.54 1.39 5.07L2 22l5.08-1.33c1.47.8 3.12 1.22 4.81 1.22 5.52 0 10.01-4.49 10.01-10.02C21.9 6.49 17.52 2 12.003 2zm6.01 13.91c-.24.68-1.2 1.24-1.65 1.32-.41.08-.94.12-1.5.12-.56 0-1.28-.04-2.12-.37-1.42-.56-2.52-1.78-3.23-2.6-.08-.1-.66-.88-.66-1.68 0-.8.41-1.19.56-1.35.15-.16.32-.2.43-.2.11 0 .21.01.3.01.09 0 .21-.03.32.22.12.27.4.98.44 1.06.04.08.06.18.01.29-.05.11-.1.21-.2.32-.1.11-.2.22-.29.32-.09.09-.19.19-.08.38.11.19.49.81 1.05 1.31.72.64 1.33.84 1.52.93.19.09.3.08.41-.05.11-.13.48-.56.61-.75.13-.19.26-.16.44-.09.18.07 1.14.54 1.34.64.2.1.33.15.38.23.05.09.05.51-.19 1.19z"/>
               </svg>
-              {t.whatsappChat}
             </a>
-            <p className={`text-[10px] font-mono uppercase tracking-[0.15em] text-center mt-3 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.orViaEmail}</p>
+            <a
+              href={`mailto:${personalDetails.email}?subject=${encodeURIComponent(t.mailSubject)}`}
+              className={`min-h-16 px-6 py-4 border text-xs font-mono font-bold tracking-widest uppercase transition-all flex items-center justify-between gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${isDark ? 'border-zinc-700 text-zinc-200 hover:border-white focus-visible:outline-white' : 'border-zinc-400 text-zinc-800 hover:border-black focus-visible:outline-black'}`}
+            >
+              <span>{t.sendEmail}</span>
+              <Mail className="w-5 h-5" aria-hidden="true" />
+            </a>
           </div>
-
-          <div className={`max-w-xl mx-auto border p-6 md:p-8 rounded-none ${
-            isDark ? 'bg-[#0D0D10] border-zinc-900' : 'bg-white border-zinc-200 shadow-lg'
-          }`}>
-            <form onSubmit={handleContactSubmit} className="space-y-6 text-left">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.fullName}</label>
-                <input 
-                  type="text" 
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder={t.namePlaceholder}
-                  required
-                  className={`w-full px-4 py-3 border rounded-none text-sm transition-all focus:outline-none ${
-                    isDark 
-                      ? 'bg-[#111113] border-zinc-800 text-[#F5F5F5] placeholder-zinc-600 focus:border-white' 
-                      : 'bg-zinc-50 border-zinc-200 text-black placeholder-zinc-400 focus:border-black'
-                  }`}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.emailAddress}</label>
-                <input 
-                  type="email" 
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="you@example.com" 
-                  required
-                  className={`w-full px-4 py-3 border rounded-none text-sm transition-all focus:outline-none ${
-                    isDark 
-                      ? 'bg-[#111113] border-zinc-800 text-[#F5F5F5] placeholder-zinc-600 focus:border-white' 
-                      : 'bg-zinc-50 border-zinc-200 text-black placeholder-zinc-400 focus:border-black'
-                  }`}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-500">{t.message}</label>
-                <textarea 
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder={t.messagePlaceholder}
-                  required
-                  className={`w-full px-4 py-3 border rounded-none text-sm transition-all focus:outline-none resize-none ${
-                    isDark 
-                      ? 'bg-[#111113] border-zinc-800 text-[#F5F5F5] placeholder-zinc-600 focus:border-white' 
-                      : 'bg-zinc-50 border-zinc-200 text-black placeholder-zinc-400 focus:border-black'
-                  }`}
-                ></textarea>
-              </div>
-
-              <motion.button 
-                type="submit" 
-                className={`w-full py-3.5 text-xs font-mono font-bold tracking-widest uppercase rounded-none btn-uv-brutalist transition-all cursor-pointer flex items-center justify-center gap-2 ${
-                  isDark ? 'bg-white hover:bg-zinc-200 text-black' : 'bg-black hover:bg-zinc-800 text-white'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Send className="w-4 h-4" />
-                {t.sendMessage}
-              </motion.button>
-            </form>
-
-            <AnimatePresence>
-              {isSubmitted && (
-                <motion.div 
-                  className={`mt-4 p-4 border text-xs font-mono tracking-wide flex items-center gap-2 rounded-none ${
-                    isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-zinc-50 border-zinc-200 text-black'
-                  }`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                >
-                  <Check className="w-3.5 h-3.5 shrink-0 stroke-[3px]" />
-                  {t.emailOpened}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </section>
+
+        </main>
 
         {/* Footer */}
         <footer className={`border-t py-16 px-6 transition-colors duration-300 ${isDark ? 'bg-zinc-950 border-zinc-900' : 'bg-zinc-50 border-zinc-200'}`}>
@@ -762,13 +708,13 @@ export default function App() {
             <div className="flex flex-col">
               <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.dialogue}</span>
               <div className="flex items-center gap-1.5 mb-1 text-xs">
-                <Mail className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+                <Mail className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} aria-hidden="true" />
                 <a href={`mailto:${personalDetails.email}`} className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>
                   {personalDetails.email}
                 </a>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
-                <svg viewBox="0 0 24 24" fill="currentColor" className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                <svg viewBox="0 0 24 24" fill="currentColor" className={`w-3.5 h-3.5 shrink-0 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} aria-hidden="true">
                   <path d="M12.003 2c-5.52 0-9.99 4.49-9.99 10.02 0 1.8.48 3.54 1.39 5.07L2 22l5.08-1.33c1.47.8 3.12 1.22 4.81 1.22 5.52 0 10.01-4.49 10.01-10.02C21.9 6.49 17.52 2 12.003 2zm6.01 13.91c-.24.68-1.2 1.24-1.65 1.32-.41.08-.94.12-1.5.12-.56 0-1.28-.04-2.12-.37-1.42-.56-2.52-1.78-3.23-2.6-.08-.1-.66-.88-.66-1.68 0-.8.41-1.19.56-1.35.15-.16.32-.2.43-.2.11 0 .21.01.3.01.09 0 .21-.03.32.22.12.27.4.98.44 1.06.04.08.06.18.01.29-.05.11-.1.21-.2.32-.1.11-.2.22-.29.32-.09.09-.19.19-.08.38.11.19.49.81 1.05 1.31.72.64 1.33.84 1.52.93.19.09.3.08.41-.05.11-.13.48-.56.61-.75.13-.19.26-.16.44-.09.18.07 1.14.54 1.34.64.2.1.33.15.38.23.05.09.05.51-.19 1.19z"/>
                 </svg>
                 <a href={`https://wa.me/6289528559579`} target="_blank" rel="noreferrer" className={`transition-colors ${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'}`}>
@@ -779,8 +725,14 @@ export default function App() {
             <div className="flex flex-col items-start md:items-end justify-between">
               <span className={`text-[10px] font-mono uppercase tracking-[0.2em] mb-4 ${isDark ? 'text-zinc-600' : 'text-zinc-400'}`}>{t.networks}</span>
               <div className="flex gap-4">
-                <a href={personalDetails.githubUrl} target="_blank" rel="noreferrer" className={`transition-colors ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>
-                  <Github className="w-4 h-4" />
+                <a
+                  href={personalDetails.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={t.githubLabel}
+                  className={`transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 ${isDark ? 'text-zinc-500 focus-visible:outline-white' : 'text-zinc-400 focus-visible:outline-black'}`}
+                >
+                  <Github className="w-4 h-4" aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -798,10 +750,13 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <motion.div 
+            <motion.div
               className={`w-full max-w-[850px] h-[90vh] flex flex-col overflow-hidden border rounded-none ${
                 isDark ? 'bg-zinc-950 border-zinc-900' : 'bg-white border-zinc-200'
               }`}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="cv-modal-title"
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
@@ -813,29 +768,33 @@ export default function App() {
                 isDark ? 'bg-[#0D0D10] border-zinc-900' : 'bg-zinc-100 border-zinc-200'
               }`}>
                 <div>
-                  <h3 className={`text-sm md:text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>// Curriculum Vitae</h3>
+                  <h3 id="cv-modal-title" className={`text-sm md:text-base font-black uppercase tracking-wider font-mono ${isDark ? 'text-white' : 'text-black'}`}>// Curriculum Vitae</h3>
                   <p className="text-[10px] text-zinc-500">{t.cvNote}</p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
+                    type="button"
                     onClick={handlePrint}
                     className={`px-4 py-2 text-xs font-mono font-bold uppercase rounded-none btn-uv-brutalist flex items-center gap-2 transition-all cursor-pointer ${
                       isDark ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'
                     }`}
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Printer className="w-3.5 h-3.5" aria-hidden="true" />
                     {t.printPdf}
                   </button>
                   <motion.button
+                    ref={closeButtonRef}
+                    type="button"
                     onClick={() => setIsCVModalOpen(false)}
+                    aria-label={t.closeCv}
                     className={`p-2 border rounded-none transition-all cursor-pointer ${
                       isDark ? 'bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border-zinc-800' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-black border-zinc-200'
                     }`}
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.85 }}
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-4 h-4" aria-hidden="true" />
                   </motion.button>
                 </div>
               </div>

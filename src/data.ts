@@ -35,20 +35,56 @@ export interface PersonalDetails {
   githubUrl: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  descriptionIndonesian: string;
+  descriptionEnglish: string;
+  contributionsIndonesian: string[];
+  contributionsEnglish: string[];
+  technologies: string[];
+  repositoryUrl: string;
+  liveUrl: string;
+}
+
 export const personalDetails: PersonalDetails = {
   name: 'Ade Iqbal Junianto',
   title: 'Retail & Customer Service Specialist',
   phone: '089528559579',
   email: 'adeiqbal160@gmail.com',
   location: 'Cinere, Depok',
-  addressIndonesian: 'Jl. Persatuan No. 27A RT002/RW004 Cinere, Kecamatan Cinere, Kota Depok, Provinsi Jawa Barat',
+  addressIndonesian: 'Cinere, Depok, Jawa Barat',
   heroSummaryIndonesian: 'Praktisi retail dan pelayanan pelanggan dengan pengalaman di operasional toko, penjualan, pengiriman, dan inventory grocery. Terbiasa menangani stok, kas, target harian, dan pelanggan langsung di lingkungan kerja cepat.',
   heroSummaryEnglish: 'Retail and customer service practitioner with hands-on experience in store operations, sales, delivery, and grocery inventory. Used to handling stock, cash, daily targets, and direct customer service in fast-paced environments.',
   summaryIndonesian: 'Saya mengawali karir sebagai Store Crew di Alfamidi. Dari sana saya bergerak ke penjualan, menjadi kurir di Sicepat Express, hingga akhirnya kini mengelola operasional grocery di Growell Pondok Indah, sebuah supermarket premium. Aktivitas harian saya berkisar pada penghitungan stok, pengelolaan uang tunai, dan pelayanan pelanggan secara langsung. Portofolio ini adalah proyek pribadi yang saya bangun sendiri dengan mempelajari pengembangan web dari nol di waktu senggang, melalui YouTube dan internet. Saya terbiasa mengambil inisiatif sendiri ketika melihat peluang.',
   summaryEnglish: 'I began my career as a Store Crew at Alfamidi. From there I moved into sales, worked as a courier at Sicepat Express, and now manage grocery operations at Growell Pondok Indah, a premium supermarket. My daily work revolves around stock counting, cash handling, and direct customer service. This portfolio is a personal project I built by learning web development from scratch in my spare time, from YouTube and the internet. I am used to taking initiative on my own when I see an opportunity.',
   linkedinUrl: 'https://linkedin.com/in/ade-iqbal-junianto',
-  githubUrl: 'https://github.com/ade9994499'
+  githubUrl: 'https://github.com/akunaoshi12-rgb'
 };
+
+export const projects: Project[] = [
+  {
+    id: 'expiry-stock-app',
+    name: 'Expiry Stock App',
+    descriptionIndonesian: 'Aplikasi internal untuk mencari produk, mencatat batch kedaluwarsa dan sisa stok, serta memantau produk berisiko berdasarkan master data.',
+    descriptionEnglish: 'An internal application for finding products, recording expiry batches and remaining stock, and monitoring at-risk products from master data.',
+    contributionsIndonesian: [
+      'Mendesain alur pencarian produk dan pencatatan batch kedaluwarsa.',
+      'Membersihkan dan memvalidasi 17.856 baris master data produk.',
+      'Membangun autentikasi serta hak akses pengguna dengan Supabase.',
+      'Menghubungkan frontend Next.js dengan REST API FastAPI.'
+    ],
+    contributionsEnglish: [
+      'Designed the product search and expiry batch recording flow.',
+      'Cleaned and validated 17,856 rows of product master data.',
+      'Built authentication and user access controls with Supabase.',
+      'Connected the Next.js frontend to the FastAPI REST API.'
+    ],
+    technologies: ['Next.js', 'TypeScript', 'FastAPI', 'Supabase', 'PostgreSQL', 'Vercel'],
+    repositoryUrl: 'https://github.com/akunaoshi12-rgb/expiry-stock-app',
+    liveUrl: 'https://expiry-stock-app.vercel.app/'
+  }
+];
 
 export const workExperiences: WorkExperience[] = [
   {

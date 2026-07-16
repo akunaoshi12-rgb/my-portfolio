@@ -30,8 +30,11 @@ npm run build
 ## Fitur
 
 - Portfolio responsive
+- Konten bahasa Indonesia dan Inggris
 - Dark mode dan light mode
-- Form contact via email
+- Tombol kontak WhatsApp dan email
+- Bagian proyek pilihan
+- Metadata SEO dan social preview
 - Modal CV
 - Print atau save CV ke PDF
 
